@@ -1,0 +1,77 @@
+
+{% load crispy_forms_tags %}
+<!-- chat/templates/chat/room.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Room</title>
+    <style>
+        #chat-message-submit {
+          display: inline-block;
+          color: #fff;
+          background-color: blue;
+          border-radius: 10px;
+        }
+
+        body{
+            padding-top: 20px;
+        }
+
+    </style>
+
+</head>
+<body>
+    <center>
+        <textarea id="chat-log" cols="70" rows="10" readonly></textarea><br>
+        <input id="chat-message-input" type="text" size="69" placeholder="Enter Your Message!"><br>
+
+        <input id="chat-message-submit" type="button" value="Send">
+    </center>
+    {{ room_name|json_script:"room-name" }}
+    {{ loged_user|json_script:"loged-user" }}
+    <script>
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + roomName
+            + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            // document.querySelector('#chat-log').value += ouruser + ":"
+            document.querySelector('#chat-log').value += ( data.ouruser+ "-->  "+ data.message + '\n');
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const ouruser = (document.getElementById('loged-user'));
+
+            const message = messageInputDom.value;
+
+            chatSocket.send(JSON.stringify({
+                'message': message, 
+                'ouruser':ouruser.textContent,
+            }));
+
+
+            messageInputDom.value = '';
+        };
+    </script>
+</body>
+</html>
