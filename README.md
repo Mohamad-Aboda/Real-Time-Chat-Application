@@ -1,15 +1,14 @@
-# Real-Time-Chat-Application
+<h1 align="center">Real-Time-Chat-Application</h1>
 
-Real-Time-Chat-Application Usin Django Channels 
+![-------------------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
-## Getting Started
-### Pre-requisites and Local Development Server
-* run ``pip install -r requirements.txt``
-* run ``python manage.py makemigrations``
-* run ``python manage.py migrate`` 
-* run ``python manage.py runserver`` 
-- You can login as admin with these credentials ``username = admin`` and ``password = admin``
-- Create another user and start chatting with each other.
+## Docker Setup:
 
-## The application is run at http://127.0.0.1:8000/
+```
+docker-compose up --build
+```
+![-------------------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
 
+### 9. Go Live :
+
+http://localhost:8000/
